@@ -1,5 +1,5 @@
 apply plugin: 'groovy'
-apply plugin: 'idea'
+apply plugin: 'application'
 
 sourceCompatibility = 1.7
 version = '0.1.0'
@@ -18,3 +18,5 @@ dependencies {
 
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
+
+mainClassName='barretta.chess.TwicCrawler'

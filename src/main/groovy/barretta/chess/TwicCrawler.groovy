@@ -16,22 +16,27 @@ class TwicCrawler {
     def run() {
         assert config.zipsUrl, "url must be set"
         assert config.pgnFile, "pgnFile must be set"
-        assert config.startId, "startId must be set"
 
-        def startId = (config.startId as int) ?: 920
+        log.info("Starting...\nwill append to [${config.pgnFile}]")
+
         if (config.fetchHistory) {
+            def startId = findFirstId()
             while (true) {
                 try {
                     appendPgns(fetchAndExtractPgns(startId++))
                     log.info("pulled [$count] zips")
                 } catch (IOException e) {
-                    log.info("Last ID found: ${startId - 1}")
+                    log.info("Last id found [${startId - 1}]")
                     break
                 }
             }
         } else {
-            startId = findLastId()
-            appendPgns(fetchAndExtractPgns(startId))
+            startId = startId ?: findLastId()
+            try {
+                appendPgns(fetchAndExtractPgns(startId))
+            } catch (IOException e) {
+                log.error("unable to find file with id [$startId]")
+            }
         }
 
         saveLastId(startId)
@@ -40,6 +45,7 @@ class TwicCrawler {
     def fetchAndExtractPgns(id) {
         def address = "${config.zipsUrl}/twic${id}g.zip"
         log.trace("fetching [$address]")
+
         def zipStream = new GroovyZipInputStream(new URL(address).openStream())
         def entries = []
         zipStream.eachEntry { zip ->
@@ -54,17 +60,27 @@ class TwicCrawler {
     }
 
     def findLastId() {
+        def lastId = getZipList().max()
+        log.info("found latest file id [$lastId]")
+        return lastId
+    }
+
+    def findFirstId() {
+        def firstId = getZipList().min()
+        log.info("found earliest file id [$firstId]")
+    }
+ 
+    def getZipList() {
         def html = new XmlSlurper(new Parser()).parse(new URL(config.zipsUrl).openStream())
-        def lastId = html.body.ul.li.inject([]) { list, file ->
+        return html.body.ul.li.inject([]) { list, file ->
             file = file.text().trim()
             def matcher = file =~ /\d+/
             if (matcher.find()) {
-                list << matcher.group()
+                list << (matcher.group() as int)
             }
             return list
-        }.sort { a, b -> Integer.parseInt(b) <=> Integer.parseInt(a) }.first()
-        log.info("found latest file id [$lastId]")
-        return lastId
+	}
+
     }
 
     def appendPgns(pgns) {
