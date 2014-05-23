@@ -33,7 +33,7 @@ class TwicCrawler {
             appendPgns(fetchAndExtractPgns(startId))
             saveLastId(startId)
         } catch (IOException e) {
-            log.error("unable to find file with id [$startId]")
+            log.error("Unable to find file with id [$startId]")
         }
     }
 
