@@ -8,7 +8,7 @@ class Twic
 {
 	public static void main(String[] args)
 	{
-		def cli = new CliBuilder(usage: "Twic [options]", header: "Options:")
+		def cli = new CliBuilder(usage: "twic_pgn_fetcher [options]", header: "Options:")
 		cli.o(longOpt: "outputPgnDir", args: 1, argName: "dir", "location to output fetched PGNs")
 		cli.i(longOpt: "url", args: 1, argName: "url", "twic location, defaults to 'http://theweekinchess.com'")
 		cli.h(longOpt: "fetchHistory", 'flag to fetch all available zips')
@@ -19,15 +19,13 @@ class Twic
 		cli.h(longOpt: "help", "displays usage")
 
 		def options = cli.parse(args)
-		if (options == null || options.h)
+		if (options.h)
 		{
 			cli.usage()
+			System.exit(0)
 		}
 
-		//build a map from the CLI options like [<longOpt name>: <value>]
-		def optionsMap = cli.options.getOptions().findAll { options[it.opt] }.collectEntries([:]) {
-			[(it.longOpt): options[it.opt]]
-		}
+		def optionsMap = mapifyAndValidateOptions(cli, options)
 
 		//if we don't have any CLI values, pull from the properties file
 		if (optionsMap.isEmpty())
@@ -98,6 +96,42 @@ class Twic
 		{
 			log.debug("SCID binary path [${optionsMap.scidBinDir}] does not exist")
 			System.exit(1)
+		}
+	}
+
+	private static def mapifyAndValidateOptions(cli, options)
+	{
+		//build a map from the CLI options like [<longOpt name>: <value>]
+		def optionsMap = cli.options.getOptions().findAll { options[it.opt] }.collectEntries([:]) {
+			[(it.longOpt): options[it.opt]]
+		}
+
+		//set default values
+		if (!optionsMap.url)
+		{
+			optionsMap.url == "http://theweekinchess.com"
+		}
+
+		//validate
+		def exit = false
+		if (!optionsMap.outputPgnDir)
+		{
+			log.error("must have an outputPgnDir set")
+			exit = true
+		}
+		if (!optionsMap.fetchId && !optionsMap.fetchHistory)
+		{
+			log.error("either fetchId must have a value or fetchHistory must be true")
+			exit = true
+		}
+
+		if (exit)
+		{
+			System.exit(1)
+		}
+		else
+		{
+			return optionsMap
 		}
 	}
 }

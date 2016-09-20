@@ -44,11 +44,14 @@ scidDb='/chess/dbs/twic'
 </pre>
 
 ##Running##
-After building, do
+After building and configuring, do
 
     $> bin/twic_pgn_builder[.bat]
 
-When execution is complete, the next id (one plus the last successfully pulled id) will be saved to the `fetchId` property in `twic.properties` so it'll be ready to go for the next run
+When execution is complete, the next id (one plus the last successfully pulled id) will be saved to the `fetchId` property in `twic.properties` so it'll be ready to go for the
+next run.
+
+You can also run with CLI args
 
 ##Scheduleing##
 So you'd like to have TPB run regularly? Well, I can't help you much beyond saying use cron or the Windows scheduler.
