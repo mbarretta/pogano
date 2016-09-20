@@ -1,7 +1,7 @@
 The Week In Chess PGN Fetcher (TPF)
 ================
 
-This tool fetches PGN files from "The Week in Chess" to a local directory and optionally into a [SCID](https://en.wikipedia
+This tool fetches PGN files from [The Week in Chess](http://theweekinchess.com) to a local directory and optionally into a [SCID](https://en.wikipedia
 .org/wiki/Shane%27s_Chess_Information_Database)
 database
 
