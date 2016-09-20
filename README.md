@@ -17,7 +17,7 @@ This will result in a distribution folder located at:
 You can run directly from there or move the directory at your pleasure.
 
 ###Configuring##
-The main config file is `twic.properties`, which is located in `src/dist` or the root directory of the distribution folder:
+The main config file is `twic.properties`, which is located in `src/dist` or the root directory of the distribution folder (`build/install/twic_pgn_fetcher`) after building:
 
 <pre>
 //url of the twic zip directory
