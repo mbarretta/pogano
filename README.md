@@ -1,7 +1,8 @@
-TWIC PGN Builder (TPB)
+TWIC PGN Fetcher (TPF)
 ================
 
-This tool builds or appends "The Week in Chess" pgn files to a local pgn file
+This tool builds or appends "The Week in Chess" pgn files to a local pgn file and optionally into a [SCID](https://en.wikipedia.org/wiki/Shane%27s_Chess_Information_Database)
+database
 
 ##Building##
 Gradle is the build tool of choice, leveraging the Application plugin to build a nice distribution directory.  Invoke thusly:
@@ -21,15 +22,24 @@ The main config file is `twic.properties`, which is located in `src/dist` or the
 //url of the twic zip directory
 zipsUrl='http://theweekinchess.com/zips'
 
-//the pgn file in which to append twic pgns
-pgnFile='/tmp/twic.pgn'
+//directory to write fetched PGNs
+pgnFile='/chess/games/twic'
 
-//if true, TPB will get all available pgn files.
+//if true, TPF will get all available PGN files.
 fetchHistory=false
 
-//specific id to fetch.  if null, TPB will try to find the most recent id and fetch it.
+//specific id to fetch.  if null, TPF will try to find the most recent id and fetch it.
 //if fetchHistory=true, then this value is ignored
-fetchId='1019'
+fetchId=1019
+
+//if true, try and import fetched files into a SCID DB
+doScidImport=true
+
+//directory of SCID binaries
+scidBinDir='/Applications/ScidvsMac.app/Contents/MacOS'
+
+//SCID DB
+scidDb='/chess/dbs/twic'
 </pre>
 
 ##Running##
