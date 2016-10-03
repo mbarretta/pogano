@@ -45,17 +45,17 @@ class TwicCrawler
 	 */
 	def fetchId()
 	{
-		def startId = config.properties.fetchId ?: findLastId() //get the configured ID or the last present on the server
+		def nextId = config.properties.fetchId ?: findLastId() //get the configured ID or the last present on the server
 		try
 		{
-			writePgns(fetchAndExtractPgns(startId), startId)
-			saveLastId(startId)
+			writePgns(fetchAndExtractPgns(nextId), nextId)
+			saveLastId(nextId + 1)
 		}
 		catch (IOException e)
 		{
-			log.error("Unable to find file with id [$startId]")
+			log.error("Unable to find file with id [$nextId]")
 		}
-		return startId
+		return nextId
 	}
 
 	/**
