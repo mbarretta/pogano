@@ -6,7 +6,7 @@ database
 ## Building
 Gradle is the build tool of choice, leveraging the Application plugin to build a nice distribution directory.  Invoke thusly:
 
-    gradle installApp
+    gradle installDist
 
 This will result in a distribution folder located at:
 
@@ -15,7 +15,7 @@ This will result in a distribution folder located at:
 You can run directly from there or move the directory at your pleasure.
 
 ## Configuring
-The main config file is `pogano.properties`, which is located in `src/dist` or the root directory of the distribution folder (`build/install/pogano`) after building
+The main config file is `pogano.properties`, which is located in `src/dist` and copied to the root directory of the install folder (`build/install/pogano`) after building
 
 ## Running
 After building and configuring, do:
