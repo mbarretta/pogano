@@ -1,7 +1,7 @@
-The Week In Chess PGN Fetcher (TPF)
+Pogano: the very limited PGN fetcher
 ================
 
-This tool fetches PGN files from [The Week in Chess](http://theweekinchess.com) to a local directory and optionally into a [SCID](https://en.wikipedia
+This tool fetches PGN files from [The Week in Chess](http://theweekinchess.com) and [lichess](https://lichess.org) to a local directory and optionally into a [SCID](https://en.wikipedia
 .org/wiki/Shane%27s_Chess_Information_Database)
 database
 
@@ -12,49 +12,24 @@ Gradle is the build tool of choice, leveraging the Application plugin to build a
 
 This will result in a distribution folder located at:
 
-	<TPB_HOME>/build/install/twic_pgn_builder
+	<POGANO_HOME>/build/install/pogano
 
 You can run directly from there or move the directory at your pleasure.
 
 ###Configuring##
-The main config file is `twic.properties`, which is located in `src/dist` or the root directory of the distribution folder (`build/install/twic_pgn_fetcher`) after building:
-
-<pre>
-//url of the twic zip directory
-zipsUrl='http://theweekinchess.com/zips'
-
-//directory to write fetched PGNs
-pgnFile='/chess/games/twic'
-
-//if true, TPF will get all available PGN files.
-fetchHistory=false
-
-//specific id to fetch.  if null, TPF will try to find the most recent id and fetch it.
-//if fetchHistory=true, then this value is ignored
-fetchId=1019
-
-//if true, try and import fetched files into a SCID DB
-doScidImport=true
-
-//directory of SCID binaries
-scidBinDir='/Applications/ScidvsMac.app/Contents/MacOS'
-
-//SCID DB
-scidDb='/chess/dbs/twic'
-</pre>
+The main config file is `pogano.properties`, which is located in `src/dist` or the root directory of the distribution folder (`build/install/pogano`) after building
 
 ##Running##
 After building and configuring, do:
 
-    $> bin/twic_pgn_fetcher[.bat]
-
-When execution is complete, the next id (one plus the last successfully pulled id) will be saved to the `fetchId` property in `twic.properties` so it'll be ready to go for the
-next run.
+    $> bin/pogano[.bat]
 
 You can also run with CLI args:
 
-    $> bin/twic_pgn_fetcher[.bat] --help
+    $> bin/pogano[.bat] --help
+    
+The primary use case is to run this once to fetch all current history (`--fetchAll --allHistory`) and then to subsequently run `--allSince` in order to get the latest games in either/both TWIC and lichess. The support this, the last fetched id will be saved to the `lastFetchId` property in `pogano.properties` after each run.
 
 ##Scheduleing##
-So you'd like to have TPF run regularly? Well, I can't help you much beyond saying use cron or the Windows scheduler.
+So you'd like to have pogano run regularly? Well, I can't help you much beyond saying use cron or the Windows scheduler.
 

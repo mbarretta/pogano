@@ -1,22 +1,31 @@
 apply plugin: 'groovy'
 apply plugin: 'application'
 
-sourceCompatibility = 1.7
-version = '0.2.0'
+sourceCompatibility = 1.8
+group 'barretta'
+version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    jcenter()
+    maven { url "https://jitpack.io" }
 }
 
 dependencies {
     compile(
-        'org.codehaus.groovy:groovy-all:2.3.9',
+        'org.codehaus.groovy:groovy-all:2.4.7:indy',
+        'org.codehaus.gpars:gpars:1.2.1',
+//        'com.github.groovy-wslite:groovy-wslite:1.1.3',
 	    'commons-cli:commons-cli:1.2',
 	    'org.ccil.cowan.tagsoup:tagsoup:1.2.1',
         'org.slf4j:slf4j-api:1.7.7',
-        'ch.qos.logback:logback-classic:1.1.2'
+        'ch.qos.logback:logback-classic:1.1.2',
+        'org.spockframework:spock-core:1.0-groovy-2.4'
+    )
+    implementation(
+        'com.github.mbarretta:groovy-wslite:master-SNAPSHOT'
     )
 }
 
-//for application plugin
-mainClassName='barretta.chess.Twic'
+mainClassName='barretta.chess.Pogano'
+applicationDefaultJvmArgs = ['-Xmx2g']
