@@ -12,18 +12,18 @@ class PropertyManager {
         reload()
     }
 
-    def reload() {
+    def reload(path = PROPERTIES_FILE) {
         //try getting from the file system
-        if (new File(PROPERTIES_FILE).exists()) {
-            properties = new ConfigSlurper().parse(new File(PROPERTIES_FILE).toURI().toURL())
+        if (new File(path).exists()) {
+            properties = new ConfigSlurper().parse(new File(path).toURI().toURL())
         }
         //else try getting from class path
-        else if (GroovyClassLoader.getSystemResource(PROPERTIES_FILE) != null) {
-            properties = new ConfigSlurper().parse(GroovyClassLoader.getSystemResource(PROPERTIES_FILE))
+        else if (GroovyClassLoader.getSystemResource(path) != null) {
+            properties = new ConfigSlurper().parse(GroovyClassLoader.getSystemResource(path))
         }
         //else error
         else {
-            throw new Exception("unable to find $PROPERTIES_FILE")
+            throw new Exception("unable to find $path")
         }
     }
 
@@ -53,11 +53,11 @@ class PropertyManager {
         def prop = obj.class.simpleName + ".lastFetchedId"
         properties.setProperty(prop, id)
 
-        //write only the changed 'lastId' field - we don't want to persist CLI stuff
+        //write only the changed 'lastFetchedId' field - we don't want to persist CLI stuff
         def f = new File(properties.getConfigFile().getPath())
         def text = f.text
         if (text.contains(prop)) {
-            text = (text =~ /$prop=.*/).replaceFirst("$prop=$id")
+            text = (text =~ /$prop=.*/).replaceFirst("$prop='$id'")
         } else {
             text += "\n$prop='$id'"
         }

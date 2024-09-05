@@ -31,6 +31,7 @@ class LichessClient implements Pogano.PoganoClient {
             } else if (config.allSince) {
                 games = fetchHistory(config.id)
             } else if (config.latest) {
+                //todo consider if this even needs to exist
                 games = fetchLatest(config.count ?: 1)
             } else {
                 games << fetchGame(config.id)
@@ -51,7 +52,7 @@ class LichessClient implements Pogano.PoganoClient {
         ) {
             text ids.join(",")
         }
-        PropertyManager.instance.setLastFetchedId(ids.last(), this)
+        PropertyManager.instance.setLastFetchedId(ids.first(), this)
 
         def idQueue = new LinkedList(ids)
         new String(response.data).split("\n\n\n").each {
@@ -102,7 +103,7 @@ class LichessClient implements Pogano.PoganoClient {
                 PoganoUtils.writePgn(it, id,"lichess")
                 games << id
             }
-            PropertyManager.instance.setLastFetchedId(games.last(), this)
+            PropertyManager.instance.setLastFetchedId(games.first(), this)
         } catch (e) {
             log.error("time to freak out: $e.message $e.cause")
         }

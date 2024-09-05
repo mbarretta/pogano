@@ -2,11 +2,19 @@ package barretta.chess
 
 import barretta.chess.clients.LichessClient
 import barretta.utils.PropertyManager
+import spock.lang.Shared
 import spock.lang.Specification
 
 class PropertyManagerSpec extends Specification
 {
-	def 'can find pogano.properties'()
+	@Shared
+	def testProperties = "poganoTest.properties"
+
+	def setupSpec() {
+		PropertyManager.instance.reload(testProperties)
+	}
+
+	def 'can find properties'()
 	{
 		expect:
 		PropertyManager.instance.properties != null
@@ -16,7 +24,7 @@ class PropertyManagerSpec extends Specification
 	{
 		when:
 		PropertyManager.instance.properties.lichessUrl = null
-		PropertyManager.instance.reload()
+		PropertyManager.instance.reload(testProperties)
 
 		then:
 		PropertyManager.instance.properties.lichessUrl != null
@@ -27,10 +35,10 @@ class PropertyManagerSpec extends Specification
 		when:
 		PropertyManager.instance.properties.fetchAll = true
 		PropertyManager.instance.setLastFetchedId("123", new LichessClient())
-		PropertyManager.instance.reload()
+		PropertyManager.instance.reload(testProperties)
 
 		then:
-		PropertyManager.instance.properties.LichessClient.lastId == 123
+		PropertyManager.instance.properties.LichessClient.lastFetchedId == 123
 
 		!PropertyManager.instance.properties.containsKey("fetchAll")
 	}
